@@ -17,7 +17,6 @@ jobs:
           private-key: ${{ secrets.private_key }}
           app-id: ${{ secrets.app_id }}
           owner: ${{ github.repository_owner }}
-          repositories: 'LowkeyLab/bazel-repo'
 
       - name: Checkout
         uses: actions/checkout@v6.0.2
