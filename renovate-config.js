@@ -1,4 +1,5 @@
 module.exports = {
+  persistRepoData: true,
    branchPrefix: "lowkeylab-renovate/",
    repositories: ["LowkeyLab/bazel-repo", "LowkeyLab/renovatebot", "LowkeyLab/gradle-build-scan-server"],
    platformCommit: "enabled",
