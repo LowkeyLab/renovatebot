@@ -1,9 +1,9 @@
 module.exports = {
+  autodiscover: true,
   persistRepoData: true,
-   branchPrefix: "lowkeylab-renovate/",
-   repositories: ["LowkeyLab/bazel-repo", "LowkeyLab/renovatebot", "LowkeyLab/gradle-build-scan-server"],
-   platformCommit: "enabled",
-   allowedUnsafeExecutions: ["bazelModDeps"],
+  branchPrefix: "lowkeylab-renovate/",
+  platformCommit: "enabled",
+  allowedUnsafeExecutions: ["bazelModDeps"],
   allowedCommands: ["REPIN=1 bazel run @maven//:pin"],
 };
 
