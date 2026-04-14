@@ -14,6 +14,13 @@ on:
           - enabled
           - disabled
           - reset
+      logLevel:
+        description: 'Log level for Renovate'
+        type: choice
+        default: info
+        options:
+          - info
+          - debug
 # Adding these as env variables makes it easy to re-use them in different steps and in bash.
 env:
   cache_archive: renovate_cache.tar.gz
@@ -82,6 +89,7 @@ jobs:
         env:
           # This enables the cache -- if this is set, it's not necessary to add it to renovate.json.
           RENOVATE_REPOSITORY_CACHE: ${{ github.event.inputs.repoCache || 'enabled' }}
+          LOG_LEVEL: ${{ github.event.inputs.logLevel || 'info' }}
 
       # Compression helps performance in the upload step!
       - name: Compress renovate cache
