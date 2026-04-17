@@ -3,6 +3,7 @@ module.exports = {
   persistRepoData: true,
   branchPrefix: "lowkeylab-renovate/",
   platformCommit: "enabled",
+  binarySource: "install",
   allowedUnsafeExecutions: ["bazelModDeps"],
   allowedCommands: ["REPIN=1 bazel run @maven//:pin", "bazel mod deps *", "bazel run *"],
 };
