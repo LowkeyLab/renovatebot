@@ -44,7 +44,7 @@ jobs:
           owner: ${{ github.repository_owner }}
 
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
 
       # This third party action allows you to download the cache artifact from different workflow runs
       # Note that actions/cache doesn't work well because the cache key would need to be computed from
