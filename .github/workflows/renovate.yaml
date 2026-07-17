@@ -90,6 +90,21 @@ jobs:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: echo "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
 
+      - name: Create BuildBuddy Bazel configuration
+        env:
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
+        run: |
+          if [ -z "$BUILDBUDDY_API_KEY" ]; then
+            echo "BUILDBUDDY_API_KEY is not configured" >&2
+            exit 1
+          fi
+
+          bazelrc="$RUNNER_TEMP/renovate.bazelrc"
+          umask 077
+          printf 'common --remote_header=x-buildbuddy-api-key=%s\n' "$BUILDBUDDY_API_KEY" > "$bazelrc"
+          sudo chown 12021:0 "$bazelrc"
+          sudo chmod 0400 "$bazelrc"
+
       - name: Self-hosted Renovate
         uses: renovatebot/github-action@v46.1.19
         with:
@@ -97,10 +112,15 @@ jobs:
           renovate-version: full
           configurationFile: renovate-config.js
           token: '${{ steps.get_token.outputs.token }}'
+          docker-volumes: /tmp:/tmp;${{ runner.temp }}/renovate.bazelrc:/home/ubuntu/.bazelrc:ro
         env:
           # This enables the cache -- if this is set, it's not necessary to add it to renovate.json.
           RENOVATE_REPOSITORY_CACHE: ${{ github.event.inputs.repoCache || 'enabled' }}
           LOG_LEVEL: ${{ github.event.inputs.logLevel || 'info' }}
+
+      - name: Remove BuildBuddy Bazel configuration
+        if: always()
+        run: sudo rm -f "$RUNNER_TEMP/renovate.bazelrc"
 
       # Compression helps performance in the upload step!
       - name: Compress renovate cache
