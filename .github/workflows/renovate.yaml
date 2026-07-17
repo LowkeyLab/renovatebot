@@ -22,6 +22,10 @@ on:
           - info
           - debug
 # Adding these as env variables makes it easy to re-use them in different steps and in bash.
+permissions:
+  contents: read
+  packages: read
+
 env:
   cache_archive: renovate_cache.tar.gz
   # This is the dir renovate provides -- if we set our own directory via cacheDir, we can run into permissions issues.
@@ -81,9 +85,15 @@ jobs:
           sudo chown -R 12021:0 /tmp/renovate/
           ls -R $cache_dir
 
+      - name: Log in to GitHub Container Registry
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+
       - name: Self-hosted Renovate
         uses: renovatebot/github-action@v46.1.19
         with:
+          renovate-image: ghcr.io/lowkeylab/renovatebot
           renovate-version: full
           configurationFile: renovate-config.js
           token: '${{ steps.get_token.outputs.token }}'

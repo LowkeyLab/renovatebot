@@ -1,0 +1,6 @@
+.git
+.github
+.omc
+.worktrees
+renovate_cache.tar.gz
+cache-download
