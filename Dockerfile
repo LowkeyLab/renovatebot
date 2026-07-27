@@ -1,4 +1,4 @@
-FROM ghcr.io/renovatebot/renovate:full@sha256:f80e3ad03e758ae2a918e51597c2ae8cbc245b5f9e07b71b105e72a4007793e2
+FROM ghcr.io/renovatebot/renovate:full@sha256:85a17dfb2b88a15c8b8b1d32e93d16d323271f1f7ba0f7236f67524c4a5b944c
 
 ARG ANDROID_API_LEVEL=35
 ARG ANDROID_BUILD_TOOLS_VERSION=35.0.0
