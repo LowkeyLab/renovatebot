@@ -106,7 +106,7 @@ jobs:
           sudo chmod 0400 "$bazelrc"
 
       - name: Self-hosted Renovate
-        uses: renovatebot/github-action@37beffda261423addd537c33f2d126df7f6ffbab # v46.2.6
+        uses: renovatebot/github-action@c314dda4a9a93b08239ec978f2043b9a433b9ac4 # v46.3.0
         with:
           renovate-image: ghcr.io/lowkeylab/renovatebot
           renovate-version: full
