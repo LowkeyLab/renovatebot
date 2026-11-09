@@ -15,7 +15,7 @@ RUN mkdir -p /etc/apt/keyrings \
     && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/google.asc] https://dl.google.com/android/cli/latest/debian/ stable main" \
         > /etc/apt/sources.list.d/android-cli.list \
     && apt-get update \
-    && apt-get install --no-install-recommends --yes android-cli \
+    && apt-get install --no-install-recommends --yes android-cli patch \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /home/ubuntu/.android \
     && install -d -o 12021 -g 0 /home/ubuntu/.android \
@@ -26,7 +26,8 @@ USER 12021
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN android --no-metrics --version \
+RUN patch --version \
+    && android --no-metrics --version \
     && android --no-metrics --sdk="${ANDROID_HOME}" sdk install \
         "platform-tools" \
         "platforms/android-${ANDROID_API_LEVEL}" \
