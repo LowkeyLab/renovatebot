@@ -1,6 +1,11 @@
 name: Renovate Image
 
 on:
+  pull_request:
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - .github/workflows/renovate-image.yaml
   push:
     branches:
       - main
@@ -17,7 +22,7 @@ permissions:
   packages: write
 
 concurrency:
-  group: renovate-image
+  group: renovate-image-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'publish' }}
   cancel-in-progress: true
 
 jobs:
@@ -27,6 +32,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Log in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: echo "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
@@ -34,6 +40,7 @@ jobs:
       - name: Build and publish image
         env:
           IMAGE: ghcr.io/lowkeylab/renovatebot
+          PUBLISH: ${{ github.event_name != 'pull_request' }}
         run: |
           docker buildx create --use
           docker buildx build \
@@ -43,5 +50,5 @@ jobs:
             --cache-to type=gha,mode=max \
             --tag "$IMAGE:full" \
             --tag "$IMAGE:$GITHUB_SHA" \
-            --push \
+            --push="$PUBLISH" \
             .
